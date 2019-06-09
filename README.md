@@ -1,4 +1,4 @@
-# Interop Twitter
+# Interop Scalaz
 
 This library provides instances for several Scalaz 7.2 typeclasses.
 
