@@ -27,7 +27,7 @@ pgpPublicRing := file("/tmp/public.asc")
 pgpSecretRing := file("/tmp/secret.asc")
 releaseEarlyWith := SonatypePublisher
 scmInfo := Some(
-  ScmInfo(url("https://github.com/zio/interop-twitter/"), "scm:git:git@github.com:zio/interop-twitter.git")
+  ScmInfo(url("https://github.com/zio/interop-scalaz/"), "scm:git:git@github.com:zio/interop-scalaz.git")
 )
 
 lazy val root = project
