@@ -14,6 +14,12 @@ inThisBuild(
         "john@degoes.net",
         url("http://degoes.net")
       )
+    ),
+    pgpPublicRing := file("/tmp/public.asc"),
+    pgpSecretRing := file("/tmp/secret.asc"),
+    releaseEarlyWith := SonatypePublisher,
+    scmInfo := Some(
+      ScmInfo(url("https://github.com/zio/interop-scalaz/"), "scm:git:git@github.com:zio/interop-scalaz.git")
     )
   )
 )
@@ -46,12 +52,6 @@ lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
       "org.specs2" %%% "specs2-scalacheck"         % "4.5.1" % Test,
       "org.specs2" %%% "specs2-matcher-extra"      % "4.5.1" % Test,
       "org.scalaz" %%% "scalaz-scalacheck-binding" % "7.2.+" % Test
-    ),
-    pgpPublicRing := file("/tmp/public.asc"),
-    pgpSecretRing := file("/tmp/secret.asc"),
-    releaseEarlyWith := SonatypePublisher,
-    scmInfo := Some(
-      ScmInfo(url("https://github.com/zio/interop-scalaz/"), "scm:git:git@github.com:zio/interop-scalaz.git")
     )
   )
 
