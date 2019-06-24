@@ -1,5 +1,7 @@
 # Interop Scalaz
 
+[![CircleCI][ci-badge]][ci-url]
+
 This library provides instances for several Scalaz 7.2 typeclasses.
 
 ### Example
@@ -34,3 +36,6 @@ def buildDashboard(id: UserId): ZIO[Database, UserError, Dashboard] =
 
 def par[R, E, A](io: ZIO[R, E, A]): scalaz72.ParIO[R, E, A] = Tag(io)
 ```
+
+[ci-badge]: https://circleci.com/gh/zio/interop-scalaz/tree/master.svg?style=svg
+[ci-url]: https://circleci.com/gh/zio/interop-scalaz/tree/master
