@@ -53,7 +53,7 @@ sealed trait ZIOInstances2 {
 
 private class ZIOMonad[R, E] extends Monad[ZIO[R, E, ?]] with BindRec[ZIO[R, E, ?]] {
   override def map[A, B](fa: ZIO[R, E, A])(f: A => B): ZIO[R, E, B]             = fa.map(f)
-  override def point[A](a: => A): ZIO[R, E, A]                                  = ZIO.succeedLazy(a)
+  override def point[A](a: => A): ZIO[R, E, A]                                  = ZIO.effectTotal(a)
   override def bind[A, B](fa: ZIO[R, E, A])(f: A => ZIO[R, E, B]): ZIO[R, E, B] = fa.flatMap(f)
   override def tailrecM[A, B](f: A => ZIO[R, E, A \/ B])(a: A): ZIO[R, E, B] =
     f(a).flatMap(_.fold(tailrecM(f), point(_)))
@@ -85,7 +85,7 @@ private trait ZIOBifunctor[R] extends Bifunctor[ZIO[R, ?, ?]] {
 }
 
 private class ZIOParApplicative[R, E] extends Applicative[scalaz72.ParIO[R, E, ?]] {
-  override def point[A](a: => A): scalaz72.ParIO[R, E, A] = Tag(ZIO.succeedLazy(a))
+  override def point[A](a: => A): scalaz72.ParIO[R, E, A] = Tag(ZIO.effectTotal(a))
   override def ap[A, B](fa: => scalaz72.ParIO[R, E, A])(f: => scalaz72.ParIO[R, E, A => B]): scalaz72.ParIO[R, E, B] = {
     lazy val fa0: ZIO[R, E, A] = Tag.unwrap(fa)
     Tag(Tag.unwrap(f).flatMap(x => fa0.map(x)))

@@ -7,8 +7,7 @@ import sbtbuildinfo._
 import BuildInfoKeys._
 
 object ScalazBuild {
-  val testDeps        = Seq("org.scalacheck"  %% "scalacheck"   % "1.14.0" % "test")
-  val compileOnlyDeps = Seq("com.github.ghik" %% "silencer-lib" % "1.4.2"  % "provided")
+  val compileOnlyDeps = Seq("com.github.ghik" %% "silencer-lib" % "1.4.2" % "provided")
 
   private val stdOptions = Seq(
     "-deprecation",
@@ -76,7 +75,7 @@ object ScalazBuild {
     crossScalaVersions := Seq("2.12.8", "2.11.12"),
     scalaVersion in ThisBuild := crossScalaVersions.value.head,
     scalacOptions := stdOptions ++ extraOptions(scalaVersion.value),
-    libraryDependencies ++= compileOnlyDeps ++ testDeps ++ Seq(
+    libraryDependencies ++= compileOnlyDeps ++ Seq(
       compilerPlugin("org.typelevel"   %% "kind-projector"  % "0.10.3"),
       compilerPlugin("com.github.ghik" %% "silencer-plugin" % "1.4.2")
     ),
