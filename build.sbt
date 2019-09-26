@@ -51,7 +51,7 @@ lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
       "org.specs2"     %%% "specs2-scalacheck"         % "4.7.1" % Test,
       "org.specs2"     %%% "specs2-matcher-extra"      % "4.7.1" % Test,
       "org.scalaz"     %%% "scalaz-scalacheck-binding" % "7.2.+" % Test,
-      "org.scalacheck" %%% "scalacheck"                % "1.14.1" % Test
+      "org.scalacheck" %%% "scalacheck"                % "1.14.2" % Test
     )
   )
 
