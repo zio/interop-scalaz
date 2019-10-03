@@ -15,6 +15,7 @@ inThisBuild(
         url("http://degoes.net")
       )
     ),
+    pgpPassphrase := sys.env.get("PGP_PASSWORD").map(_.toArray),
     pgpPublicRing := file("/tmp/public.asc"),
     pgpSecretRing := file("/tmp/secret.asc"),
     releaseEarlyWith := SonatypePublisher,
@@ -23,6 +24,8 @@ inThisBuild(
     )
   )
 )
+
+ThisBuild / publishTo := sonatypePublishToBundle.value
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
