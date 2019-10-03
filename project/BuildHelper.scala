@@ -6,7 +6,7 @@ import sbtcrossproject.CrossPlugin.autoImport.CrossType
 import sbtbuildinfo._
 import BuildInfoKeys._
 
-object ScalazBuild {
+object BuildHelper {
   val compileOnlyDeps = Seq("com.github.ghik" %% "silencer-lib" % "1.4.2" % "provided")
 
   private val stdOptions = Seq(
