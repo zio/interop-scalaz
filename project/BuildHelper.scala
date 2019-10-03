@@ -6,7 +6,7 @@ import sbtcrossproject.CrossPlugin.autoImport.CrossType
 import sbtbuildinfo._
 import BuildInfoKeys._
 
-object ScalazBuild {
+object BuildHelper {
   val compileOnlyDeps = Seq("com.github.ghik" %% "silencer-lib" % "1.4.2" % "provided")
 
   private val stdOptions = Seq(
@@ -23,12 +23,14 @@ object ScalazBuild {
     "-language:existentials",
     "-explaintypes",
     "-Yrangepos",
-    "-Xfuture",
     "-Xsource:2.13",
     "-Xlint:_,-type-parameter-shadow",
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard"
   )
+
+  private val optimizerOptions =
+    Seq("-opt:l:inline", "-opt-inline-from:zio.internal.**")
 
   val buildInfoSettings = Seq(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, isSnapshot),
@@ -39,22 +41,20 @@ object ScalazBuild {
   def extraOptions(scalaVersion: String) =
     CrossVersion.partialVersion(scalaVersion) match {
       case Some((2, 13)) =>
-        std2xOptions
+        std2xOptions ++ optimizerOptions
       case Some((2, 12)) =>
         Seq(
           "-opt-warnings",
           "-Ywarn-extra-implicit",
           "-Ywarn-unused:_,imports",
           "-Ywarn-unused:imports",
-          "-opt:l:inline",
-          "-opt-inline-from:zio.internal.**",
           "-Ypartial-unification",
           "-Yno-adapted-args",
           "-Ywarn-inaccessible",
           "-Ywarn-infer-any",
           "-Ywarn-nullary-override",
           "-Ywarn-nullary-unit"
-        ) ++ std2xOptions
+        ) ++ std2xOptions ++ optimizerOptions
       case Some((2, 11)) =>
         Seq(
           "-Ypartial-unification",
@@ -72,7 +72,7 @@ object ScalazBuild {
   def stdSettings(prjName: String) = Seq(
     name := s"$prjName",
     scalacOptions := stdOptions,
-    crossScalaVersions := Seq("2.12.8", "2.11.12"),
+    crossScalaVersions := Seq("2.13.0", "2.12.8", "2.11.12"),
     scalaVersion in ThisBuild := crossScalaVersions.value.head,
     scalacOptions := stdOptions ++ extraOptions(scalaVersion.value),
     libraryDependencies ++= compileOnlyDeps ++ Seq(
