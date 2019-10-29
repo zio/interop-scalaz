@@ -49,9 +49,9 @@ lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "dev.zio"        %%% "zio"                       % "1.0.0-RC15",
       "org.scalaz"     %%% "scalaz-core"               % "7.2.+" % Optional,
-      "org.specs2"     %%% "specs2-core"               % "4.7.1" % Test,
-      "org.specs2"     %%% "specs2-scalacheck"         % "4.7.1" % Test,
-      "org.specs2"     %%% "specs2-matcher-extra"      % "4.7.1" % Test,
+      "org.specs2"     %%% "specs2-core"               % "4.8.0" % Test,
+      "org.specs2"     %%% "specs2-scalacheck"         % "4.8.0" % Test,
+      "org.specs2"     %%% "specs2-matcher-extra"      % "4.8.0" % Test,
       "org.scalaz"     %%% "scalaz-scalacheck-binding" % "7.2.+" % Test,
       "org.scalacheck" %%% "scalacheck"                % "1.14.2" % Test
     )
