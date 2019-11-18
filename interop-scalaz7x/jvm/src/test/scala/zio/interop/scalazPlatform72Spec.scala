@@ -10,7 +10,6 @@ import zio.interop.scalaz72._
 import zio.internal.PlatformLive
 
 class scalazPlatform72Spec extends Specification with ScalaCheck with GenIO {
-
   def is = s2"""
     laws must hold for
       Bifunctor              ${bifunctor.laws[IO]}
@@ -46,7 +45,6 @@ class scalazPlatform72Spec extends Specification with ScalaCheck with GenIO {
 }
 
 trait GenIO {
-
   /**
    * Given a generator for `A`, produces a generator for `IO[E, A]` using the `IO.point` constructor.
    */
@@ -84,5 +82,4 @@ trait GenIO {
    */
   def genIO[E: Arbitrary, A: Arbitrary]: Gen[IO[E, A]] =
     Gen.oneOf(genSuccess[E, A], genFailure[E, A])
-
 }
