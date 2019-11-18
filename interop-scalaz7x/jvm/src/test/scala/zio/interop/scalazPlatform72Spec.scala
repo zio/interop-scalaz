@@ -23,7 +23,7 @@ class scalazPlatform72Spec extends Specification with ScalaCheck with GenIO {
   type Env = Any
 
   private val rts: Runtime[Env] = new DefaultRuntime {
-    override val Platform = PlatformLive
+    override val platform = PlatformLive
       .makeDefault()
       .withReportFailure(_ => ())
   }
