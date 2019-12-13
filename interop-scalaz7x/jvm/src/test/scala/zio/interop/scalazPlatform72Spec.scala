@@ -45,6 +45,7 @@ class scalazPlatform72Spec extends Specification with ScalaCheck with GenIO {
 }
 
 trait GenIO {
+
   /**
    * Given a generator for `A`, produces a generator for `IO[E, A]` using the `IO.point` constructor.
    */
