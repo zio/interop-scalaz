@@ -7,10 +7,9 @@ import scalaz.Scalaz._
 import scalaz.scalacheck.ScalazProperties._
 import scalaz._
 import zio.interop.scalaz72._
-import zio.internal.PlatformLive
 
 class scalazPlatform72Spec extends Specification with ScalaCheck with GenIO {
-  def is = s2"""
+  def is          = s2"""
     laws must hold for
       Bifunctor              ${bifunctor.laws[IO]}
       BindRec                ${bindRec.laws[IO[Int, ?]]}
@@ -20,13 +19,7 @@ class scalazPlatform72Spec extends Specification with ScalaCheck with GenIO {
       MonadError             ${monadError.laws[IO[Int, ?], Int]}
       Applicative (Parallel) ${applicative.laws[scalaz72.ParIO[Any, Int, ?]]}
   """
-  type Env = Any
-
-  private val rts: Runtime[Env] = new DefaultRuntime {
-    override val platform = PlatformLive
-      .makeDefault()
-      .withReportFailure(_ => ())
-  }
+  private val rts = Runtime.default
 
   implicit def ioEqual[E: Equal, A: Equal]: Equal[IO[E, A]] =
     new Equal[IO[E, A]] {
@@ -65,7 +58,7 @@ trait GenIO {
   /**
    * Given a generator for `E`, produces a generator for `IO[E, A]` using the `IO.fail` constructor.
    */
-  def genSyncFailure[E: Arbitrary, A]: Gen[IO[E, A]] = Arbitrary.arbitrary[E].map(IO.fail[E])
+  def genSyncFailure[E: Arbitrary, A]: Gen[IO[E, A]] = Arbitrary.arbitrary[E].map(IO.fail[E](_))
 
   /**
    * Given a generator for `E`, produces a generator for `IO[E, A]` using the `IO.async` constructor.

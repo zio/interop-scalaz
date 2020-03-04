@@ -45,7 +45,7 @@ lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
   .settings(buildInfoSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "dev.zio"        %%% "zio"                       % "1.0.0-RC17",
+      "dev.zio"        %%% "zio"                       % "1.0.0-RC18",
       "org.scalaz"     %%% "scalaz-core"               % "7.2.+" % Optional,
       "org.specs2"     %%% "specs2-core"               % "4.8.2" % Test,
       "org.specs2"     %%% "specs2-scalacheck"         % "4.8.2" % Test,
@@ -59,5 +59,5 @@ lazy val interopScalaz7xJVM = interopScalaz7x.jvm
 
 lazy val interopScalaz7xJS = interopScalaz7x.js
   .settings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "0.2.6" % Test
+    libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "1.0.0" % Test
   )
