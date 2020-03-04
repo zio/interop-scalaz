@@ -70,11 +70,7 @@ private trait ZIOPlus[R, E] extends Plus[ZIO[R, E, ?]] {
 
 private class ZIOMonadPlus[R, E: Monoid] extends ZIOMonadError[R, E] with MonadPlus[ZIO[R, E, ?]] {
   override def plus[A](a: ZIO[R, E, A], b: => ZIO[R, E, A]): ZIO[R, E, A] =
-    a.catchAll { e1 =>
-      b.catchAll { e2 =>
-        ZIO.fail(Monoid[E].append(e1, e2))
-      }
-    }
+    a.catchAll(e1 => b.catchAll(e2 => ZIO.fail(Monoid[E].append(e1, e2))))
   override def empty[A]: ZIO[R, E, A] = raiseError(Monoid[E].zero)
 }
 
