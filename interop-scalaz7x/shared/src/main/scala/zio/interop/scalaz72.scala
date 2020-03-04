@@ -18,15 +18,14 @@ package zio.interop
 
 import scalaz.Tags.Parallel
 import scalaz.{ @@, \/, Applicative, Bifunctor, BindRec, Monad, MonadError, MonadPlus, Monoid, Plus, Tag }
-import zio.{ Task, TaskR, ZIO }
+import zio.{ RIO, Task, ZIO }
 
 object scalaz72 extends ZIOInstances with Scalaz72Platform {
   type ParIO[R, E, A] = ZIO[R, E, A] @@ Parallel
 }
 
 abstract class ZIOInstances extends ZIOInstances1 {
-  implicit def zioTaskInstances[R]
-    : MonadError[TaskR[R, ?], Throwable] with BindRec[TaskR[R, ?]] with Plus[TaskR[R, ?]] =
+  implicit def zioTaskInstances[R]: MonadError[RIO[R, ?], Throwable] with BindRec[RIO[R, ?]] with Plus[RIO[R, ?]] =
     new ZIOMonadError[R, Throwable] with ZIOPlus[R, Throwable]
 
   // cached for efficiency
@@ -70,11 +69,7 @@ private trait ZIOPlus[R, E] extends Plus[ZIO[R, E, ?]] {
 
 private class ZIOMonadPlus[R, E: Monoid] extends ZIOMonadError[R, E] with MonadPlus[ZIO[R, E, ?]] {
   override def plus[A](a: ZIO[R, E, A], b: => ZIO[R, E, A]): ZIO[R, E, A] =
-    a.catchAll { e1 =>
-      b.catchAll { e2 =>
-        ZIO.fail(Monoid[E].append(e1, e2))
-      }
-    }
+    a.catchAll(e1 => b.catchAll(e2 => ZIO.fail(Monoid[E].append(e1, e2))))
   override def empty[A]: ZIO[R, E, A] = raiseError(Monoid[E].zero)
 }
 
