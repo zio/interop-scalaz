@@ -38,20 +38,20 @@ lazy val root = project
     unusedCompileDependenciesFilter -= moduleFilter("org.scala-js", "scalajs-library")
   )
 
+val zioVersion = "1.0.0-RC18-2"
+
 lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
   .in(file("interop-scalaz7x"))
   .enablePlugins(BuildInfoPlugin)
   .settings(stdSettings("zio-interop-scalaz7x"))
+  .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
   .settings(buildInfoSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "dev.zio"        %%% "zio"                       % "1.0.0-RC18",
-      "org.scalaz"     %%% "scalaz-core"               % "7.2.+" % Optional,
-      "org.specs2"     %%% "specs2-core"               % "4.8.2" % Test,
-      "org.specs2"     %%% "specs2-scalacheck"         % "4.8.2" % Test,
-      "org.specs2"     %%% "specs2-matcher-extra"      % "4.8.2" % Test,
-      "org.scalaz"     %%% "scalaz-scalacheck-binding" % "7.2.+" % Test,
-      "org.scalacheck" %%% "scalacheck"                % "1.14.3" % Test
+      "dev.zio"    %%% "zio"          % zioVersion,
+      "org.scalaz" %%% "scalaz-core"  % "7.2.+" % Optional,
+      "dev.zio"    %%% "zio-test"     % zioVersion % "test",
+      "dev.zio"    %%% "zio-test-sbt" % zioVersion % "test"
     )
   )
 
@@ -59,5 +59,5 @@ lazy val interopScalaz7xJVM = interopScalaz7x.jvm
 
 lazy val interopScalaz7xJS = interopScalaz7x.js
   .settings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-java-time" % "1.0.0" % Test
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC3" % Test
   )
