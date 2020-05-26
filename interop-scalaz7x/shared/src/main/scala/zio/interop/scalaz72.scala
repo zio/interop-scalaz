@@ -53,7 +53,7 @@ private class ZIOMonad[R, E] extends Monad[ZIO[R, E, ?]] with BindRec[ZIO[R, E, 
   override def map[A, B](fa: ZIO[R, E, A])(f: A => B): ZIO[R, E, B]             = fa.map(f)
   override def point[A](a: => A): ZIO[R, E, A]                                  = ZIO.effectTotal(a)
   override def bind[A, B](fa: ZIO[R, E, A])(f: A => ZIO[R, E, B]): ZIO[R, E, B] = fa.flatMap(f)
-  override def tailrecM[A, B](f: A => ZIO[R, E, A \/ B])(a: A): ZIO[R, E, B] =
+  override def tailrecM[A, B](f: A => ZIO[R, E, A \/ B])(a: A): ZIO[R, E, B]    =
     f(a).flatMap(_.fold(tailrecM(f), point(_)))
 }
 
@@ -70,7 +70,7 @@ private trait ZIOPlus[R, E] extends Plus[ZIO[R, E, ?]] {
 private class ZIOMonadPlus[R, E: Monoid] extends ZIOMonadError[R, E] with MonadPlus[ZIO[R, E, ?]] {
   override def plus[A](a: ZIO[R, E, A], b: => ZIO[R, E, A]): ZIO[R, E, A] =
     a.catchAll(e1 => b.catchAll(e2 => ZIO.fail(Monoid[E].append(e1, e2))))
-  override def empty[A]: ZIO[R, E, A] = raiseError(Monoid[E].zero)
+  override def empty[A]: ZIO[R, E, A]                                     = raiseError(Monoid[E].zero)
 }
 
 private trait ZIOBifunctor[R] extends Bifunctor[ZIO[R, ?, ?]] {

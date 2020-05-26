@@ -34,15 +34,16 @@ object scalazPlatform72Spec extends DefaultRunnableSpec with GenIO {
   implicit val ioParGen: Gen[Random, scalaz72.ParIO[Any, Int, Int]]           = intGenIO.map(Tag.apply)
   implicit val ioParGenFn2: Gen[Random, scalaz72.ParIO[Any, Int, Int => Int]] = intGenIOFn2.map(Tag.apply)
 
-  override def spec = suite("scalazPlatform72Spec")(
-    suite("laws must hold for")(
-      ScalazProperties.bifunctor.laws[IO],
-      ScalazProperties.bindRec.laws[IO[Int, ?]],
-      ScalazProperties.plus.laws[IO[Int, ?]],
-      ScalazProperties.monadPlus.laws[IO[Int, ?]]("monad plus"),
-      ScalazProperties.monadPlus.laws[IO[Option[Unit], ?]]("monad plus (monoid)"),
-      ScalazProperties.monadError.laws[IO[Int, ?], Int],
-      ScalazProperties.applicative.laws[scalaz72.ParIO[Any, Int, ?]]
+  override def spec =
+    suite("scalazPlatform72Spec")(
+      suite("laws must hold for")(
+        ScalazProperties.bifunctor.laws[IO],
+        ScalazProperties.bindRec.laws[IO[Int, ?]],
+        ScalazProperties.plus.laws[IO[Int, ?]],
+        ScalazProperties.monadPlus.laws[IO[Int, ?]]("monad plus"),
+        ScalazProperties.monadPlus.laws[IO[Option[Unit], ?]]("monad plus (monoid)"),
+        ScalazProperties.monadError.laws[IO[Int, ?], Int],
+        ScalazProperties.applicative.laws[scalaz72.ParIO[Any, Int, ?]]
+      )
     )
-  )
 }
