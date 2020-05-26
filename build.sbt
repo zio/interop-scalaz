@@ -38,8 +38,6 @@ lazy val root = project
     unusedCompileDependenciesFilter -= moduleFilter("org.scala-js", "scalajs-library")
   )
 
-val zioVersion = "1.0.0-RC18-2"
-
 lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
   .in(file("interop-scalaz7x"))
   .enablePlugins(BuildInfoPlugin)
@@ -48,10 +46,10 @@ lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
   .settings(buildInfoSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "dev.zio"    %%% "zio"          % zioVersion,
+      "dev.zio"    %%% "zio"          % "1.0.0-RC20",
       "org.scalaz" %%% "scalaz-core"  % "7.2.+" % Optional,
-      "dev.zio"    %%% "zio-test"     % zioVersion % "test",
-      "dev.zio"    %%% "zio-test-sbt" % zioVersion % "test"
+      "dev.zio"    %%% "zio-test"     % "1.0.0-RC20" % "test",
+      "dev.zio"    %%% "zio-test-sbt" % "1.0.0-RC20" % "test"
     )
   )
 
