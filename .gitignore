@@ -2,6 +2,7 @@
 .metals
 .sbtopts
 project/.sbt
+project/metals.sbt
 project/travis-deploy-key
 project/secrets.tar.xz
 project/zecret
