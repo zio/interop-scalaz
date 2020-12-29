@@ -66,7 +66,7 @@ object BuildHelper {
           "-Xexperimental",
           "-Ywarn-unused-import"
         ) ++ std2xOptions
-      case _ => Seq.empty
+      case _             => Seq.empty
     }
 
   def stdSettings(prjName: String) = Seq(
@@ -91,7 +91,7 @@ object BuildHelper {
         case Some((2, x)) if x >= 12 =>
           CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.12+")) ++
             CrossType.Full.sharedSrcDir(baseDirectory.value, "test").toList.map(f => file(f.getPath + "-2.12+"))
-        case _ => Nil
+        case _                       => Nil
       }
     },
     Test / unmanagedSourceDirectories ++= {
@@ -103,7 +103,7 @@ object BuildHelper {
             file(sourceDirectory.value.getPath + "/test/scala-2.12"),
             file(sourceDirectory.value.getPath + "/test/scala-2.12+")
           )
-        case _ => Nil
+        case _                       => Nil
       }
     }
   )

@@ -44,16 +44,16 @@ object ScalazProperties {
   )(implicit rv1: GenR[A], rv2: GenR[B], rv3: GenR[C]): ZIO[Random, Nothing, TestResult] =
     check(rv1, rv2, rv3)((v1, v2, v3) => assert(law(v1, v2, v3))(isTrue))
 
-  def checkLaw[A, B, C, D](law: (A, B, C, D) => Boolean)(
-    implicit rv1: GenR[A],
+  def checkLaw[A, B, C, D](law: (A, B, C, D) => Boolean)(implicit
+    rv1: GenR[A],
     rv2: GenR[B],
     rv3: GenR[C],
     rv4: GenR[D]
   ): ZIO[Random, Nothing, TestResult] =
     check(rv1, rv2, rv3, rv4)((v1, v2, v3, v4) => assert(law(v1, v2, v3, v4))(isTrue))
 
-  def checkLaw[A, B, C, D, E](law: (A, B, C, D, E) => Boolean)(
-    implicit rv1: GenR[A],
+  def checkLaw[A, B, C, D, E](law: (A, B, C, D, E) => Boolean)(implicit
+    rv1: GenR[A],
     rv2: GenR[B],
     rv3: GenR[C],
     rv4: GenR[D],
@@ -90,8 +90,8 @@ object ScalazProperties {
     def identity[F[_], X](implicit F: InvariantFunctor[F], afx: GenR[F[X]], ef: Equal[F[X]]) =
       check(afx)(afx => assert(F.invariantFunctorLaw.invariantIdentity[X](afx))(isTrue))
 
-    def composite[F[_], X, Y, Z](
-      implicit F: InvariantFunctor[F],
+    def composite[F[_], X, Y, Z](implicit
+      F: InvariantFunctor[F],
       af: GenR[F[X]],
       axy: GenR[(X => Y)],
       ayz: GenR[(Y => Z)],
@@ -103,8 +103,8 @@ object ScalazProperties {
         assert(F.invariantFunctorLaw.invariantComposite[X, Y, Z](af, axy, ayx, ayz, azy))(isTrue)
       )
 
-    def laws[F[_]](
-      implicit F: InvariantFunctor[F],
+    def laws[F[_]](implicit
+      F: InvariantFunctor[F],
       af: GenR[F[Int]],
       axy: GenR[(Int => Int)],
       ef: Equal[F[Int]]
@@ -119,8 +119,8 @@ object ScalazProperties {
     def identity[F[_], X](implicit F: Functor[F], afx: GenR[F[X]], ef: Equal[F[X]]) =
       checkLaw(F.functorLaw.identity[X] _)
 
-    def composite[F[_], X, Y, Z](
-      implicit F: Functor[F],
+    def composite[F[_], X, Y, Z](implicit
+      F: Functor[F],
       af: GenR[F[X]],
       axy: GenR[(X => Y)],
       ayz: GenR[(Y => Z)],
@@ -137,8 +137,8 @@ object ScalazProperties {
   }
 
   object apply { self =>
-    def composition[F[_], X, Y, Z](
-      implicit ap: Apply[F],
+    def composition[F[_], X, Y, Z](implicit
+      ap: Apply[F],
       afx: GenR[F[X]],
       au: GenR[F[Y => Z]],
       av: GenR[F[X => Y]],
@@ -146,8 +146,8 @@ object ScalazProperties {
     ) =
       checkLaw(ap.applyLaw.composition[X, Y, Z] _)
 
-    def laws[F[_]](
-      implicit F: Apply[F],
+    def laws[F[_]](implicit
+      F: Apply[F],
       af: GenR[F[Int]],
       aff: GenR[F[Int => Int]],
       axy: GenR[(Int => Int)],
@@ -166,24 +166,24 @@ object ScalazProperties {
     def homomorphism[F[_], X, Y](implicit ap: Applicative[F], ax: GenR[X], af: GenR[X => Y], e: Equal[F[Y]]) =
       checkLaw(ap.applicativeLaw.homomorphism[X, Y] _)
 
-    def interchange[F[_], X, Y](
-      implicit ap: Applicative[F],
+    def interchange[F[_], X, Y](implicit
+      ap: Applicative[F],
       ax: GenR[X],
       afx: GenR[F[X => Y]],
       e: Equal[F[Y]]
     ) =
       checkLaw(ap.applicativeLaw.interchange[X, Y] _)
 
-    def mapApConsistency[F[_], X, Y](
-      implicit ap: Applicative[F],
+    def mapApConsistency[F[_], X, Y](implicit
+      ap: Applicative[F],
       ax: GenR[F[X]],
       afx: GenR[X => Y],
       e: Equal[F[Y]]
     ) =
       checkLaw(ap.applicativeLaw.mapLikeDerived[X, Y] _)
 
-    def laws[F[_]](
-      implicit F: Applicative[F],
+    def laws[F[_]](implicit
+      F: Applicative[F],
       af: GenR[F[Int]],
       ag: GenR[F[Int => Int]],
       ah: GenR[Int => Int],
@@ -200,8 +200,8 @@ object ScalazProperties {
   }
 
   object bind {
-    def associativity[M[_], X, Y, Z](
-      implicit M: Bind[M],
+    def associativity[M[_], X, Y, Z](implicit
+      M: Bind[M],
       amx: GenR[M[X]],
       af: GenR[(X => M[Y])],
       ag: GenR[(Y => M[Z])],
@@ -209,16 +209,16 @@ object ScalazProperties {
     ) =
       checkLaw(M.bindLaw.associativeBind[X, Y, Z] _)
 
-    def bindApConsistency[M[_], X, Y](
-      implicit M: Bind[M],
+    def bindApConsistency[M[_], X, Y](implicit
+      M: Bind[M],
       amx: GenR[M[X]],
       af: GenR[M[X => Y]],
       emy: Equal[M[Y]]
     ) =
       checkLaw(M.bindLaw.apLikeDerived[X, Y] _)
 
-    def laws[M[_]](
-      implicit a: Bind[M],
+    def laws[M[_]](implicit
+      a: Bind[M],
       am: GenR[M[Int]],
       af: GenR[Int => M[Int]],
       ag: GenR[M[Int => Int]],
@@ -233,16 +233,16 @@ object ScalazProperties {
   }
 
   object bindRec {
-    def tailrecBindConsistency[M[_], X](
-      implicit M: BindRec[M],
+    def tailrecBindConsistency[M[_], X](implicit
+      M: BindRec[M],
       ax: GenR[X],
       af: GenR[X => M[X]],
       emx: Equal[M[X]]
     ) =
       checkLaw(M.bindRecLaw.tailrecBindConsistency[X] _)
 
-    def laws[M[_]](
-      implicit a: BindRec[M],
+    def laws[M[_]](implicit
+      a: BindRec[M],
       am: GenR[M[Int]],
       av: GenR[Int],
       af: GenR[Int => M[Int]],
@@ -260,16 +260,16 @@ object ScalazProperties {
     def rightIdentity[M[_], X](implicit M: Monad[M], e: Equal[M[X]], a: GenR[M[X]]) =
       checkLaw(M.monadLaw.rightIdentity[X] _)
 
-    def leftIdentity[M[_], X, Y](
-      implicit am: Monad[M],
+    def leftIdentity[M[_], X, Y](implicit
+      am: Monad[M],
       emy: Equal[M[Y]],
       ax: GenR[X],
       af: GenR[(X => M[Y])]
     ) =
       checkLaw(am.monadLaw.leftIdentity[X, Y] _)
 
-    def laws[M[_]](
-      implicit a: Monad[M],
+    def laws[M[_]](implicit
+      a: Monad[M],
       am: GenR[M[Int]],
       af: GenR[Int => M[Int]],
       ag: GenR[M[Int => Int]],
@@ -337,8 +337,8 @@ object ScalazProperties {
     def rightZero[F[_], X](implicit F: MonadPlus[F], afx: GenR[F[X]], ef: Equal[F[X]]) =
       checkLaw(F.strongMonadPlusLaw.rightZero[X] _)
 
-    def laws[F[_]](name: String)(
-      implicit F: MonadPlus[F],
+    def laws[F[_]](name: String)(implicit
+      F: MonadPlus[F],
       af: GenR[F[Int]],
       ag: GenR[F[Int => Int]],
       ah: GenR[Int => F[Int]],
@@ -355,8 +355,8 @@ object ScalazProperties {
   }
 
   object bifunctor {
-    def laws[F[_, _]](
-      implicit F: Bifunctor[F],
+    def laws[F[_, _]](implicit
+      F: Bifunctor[F],
       E: Equal[F[Int, Int]],
       af: GenR[F[Int, Int]],
       axy: GenR[(Int => Int)]
@@ -368,25 +368,25 @@ object ScalazProperties {
   }
 
   object monadError {
-    def raisedErrorsHandled[F[_], E, A](
-      implicit me: MonadError[F, E],
+    def raisedErrorsHandled[F[_], E, A](implicit
+      me: MonadError[F, E],
       eq: Equal[F[A]],
       ae: GenR[E],
       afea: GenR[E => F[A]]
-    ) =
+    )                                                                                                      =
       checkLaw(me.monadErrorLaw.raisedErrorsHandled[A] _)
     def errorsRaised[F[_], E, A](implicit me: MonadError[F, E], eq: Equal[F[A]], ae: GenR[E], aa: GenR[A]) =
       checkLaw(me.monadErrorLaw.errorsRaised[A] _)
-    def errorsStopComputation[F[_], E, A](
-      implicit me: MonadError[F, E],
+    def errorsStopComputation[F[_], E, A](implicit
+      me: MonadError[F, E],
       eq: Equal[F[A]],
       ae: GenR[E],
       aa: GenR[A]
-    ) =
+    )                                                                                                      =
       checkLaw(me.monadErrorLaw.errorsStopComputation[A] _)
 
-    def laws[F[_], E](
-      implicit me: MonadError[F, E],
+    def laws[F[_], E](implicit
+      me: MonadError[F, E],
       f: GenR[F[Int]],
       ag: GenR[F[Int => Int]],
       ah: GenR[E => F[Int]],
