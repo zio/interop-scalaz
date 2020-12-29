@@ -1,6 +1,6 @@
 # Interop Scalaz
 
-[![CircleCI][Badge-Circle]][Link-Circle]
+![CI][Badge-CI]
 [![Releases][Badge-SonatypeReleases]][Link-SonatypeReleases]
 [![Snapshots][Badge-SonatypeSnapshots]][Link-SonatypeSnapshots]
 
@@ -39,7 +39,7 @@ def buildDashboard(id: UserId): ZIO[Database, UserError, Dashboard] =
 def par[R, E, A](io: ZIO[R, E, A]): scalaz72.ParIO[R, E, A] = Tag(io)
 ```
 
-[Badge-Circle]: https://circleci.com/gh/zio/interop-scalaz/tree/master.svg?style=svg
+[Badge-CI]: https://github.com/zio/interop-scalaz/workflows/CI/badge.svg
 [Badge-SonatypeReleases]: https://img.shields.io/nexus/r/https/oss.sonatype.org/dev.zio/zio-interop-scalaz_2.12.svg "Sonatype Releases"
 [Badge-SonatypeSnapshots]: https://img.shields.io/nexus/s/https/oss.sonatype.org/dev.zio/zio-interop-scalaz_2.12.svg "Sonatype Snapshots"
 [Link-Circle]: https://circleci.com/gh/zio/interop-scalaz/tree/master
