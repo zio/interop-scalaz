@@ -75,7 +75,7 @@ object BuildHelper {
     crossScalaVersions := Seq("2.13.3", "2.12.12", "2.11.12"),
     scalaVersion in ThisBuild := crossScalaVersions.value.head,
     scalacOptions := stdOptions ++ extraOptions(scalaVersion.value),
-    libraryDependencies ++= compileOnlyDeps ++ Seq(
+    libraryDependencies ++= Seq(
       "com.github.ghik" % "silencer-lib" % SilencerVersion % Provided,
       compilerPlugin("com.github.ghik" % "silencer-plugin" % SilencerVersion),
       compilerPlugin("org.typelevel"   %% "kind-projector"  % "0.10.3")
