@@ -59,7 +59,7 @@ jobs:
       - name: Run tests
         run: sbt ++${{ matrix.scala }}! testJS
 
-  test:
+  testJVM:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -89,7 +89,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-20.04
-    needs: [lint, test]
+    needs: [lint, testJS, testJVM]
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout current branch
