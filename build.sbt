@@ -59,5 +59,5 @@ lazy val interopScalaz7xJVM = interopScalaz7x.jvm
 
 lazy val interopScalaz7xJS = interopScalaz7x.js
   .settings(
-    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0" % Test
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" % Test
   )
