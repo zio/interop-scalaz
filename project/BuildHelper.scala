@@ -78,7 +78,7 @@ object BuildHelper {
     libraryDependencies ++= Seq(
       "com.github.ghik" % "silencer-lib" % SilencerVersion % Provided,
       compilerPlugin("com.github.ghik" % "silencer-plugin" % SilencerVersion),
-      compilerPlugin("org.typelevel"   %% "kind-projector"  % "0.10.3")
+      compilerPlugin("org.typelevel"  %% "kind-projector"  % "0.10.3")
     ),
     parallelExecution in Test := true,
     incOptions ~= (_.withLogRecompileOnMacro(false)),
