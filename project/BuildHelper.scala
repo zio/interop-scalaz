@@ -7,7 +7,7 @@ import sbtbuildinfo._
 import BuildInfoKeys._
 
 object BuildHelper {
-  val compileOnlyDeps = Seq("com.github.ghik" %% "silencer-lib" % "1.7.1" % "provided")
+  private val SilencerVersion = "1.7.1"
 
   private val stdOptions = Seq(
     "-deprecation",
@@ -76,8 +76,9 @@ object BuildHelper {
     scalaVersion in ThisBuild := crossScalaVersions.value.head,
     scalacOptions := stdOptions ++ extraOptions(scalaVersion.value),
     libraryDependencies ++= compileOnlyDeps ++ Seq(
-      compilerPlugin("org.typelevel"   %% "kind-projector"  % "0.10.3"),
-      compilerPlugin("com.github.ghik" %% "silencer-plugin" % "1.4.2")
+      "com.github.ghik" % "silencer-lib" % SilencerVersion % Provided,
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % SilencerVersion),
+      compilerPlugin("org.typelevel"   %% "kind-projector"  % "0.10.3")
     ),
     parallelExecution in Test := true,
     incOptions ~= (_.withLogRecompileOnMacro(false)),
