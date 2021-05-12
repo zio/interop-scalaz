@@ -1,8 +1,12 @@
 # Interop Scalaz
 
+[![Project stage][Stage]][Stage-Page]
 ![CI][Badge-CI]
 [![Releases][Badge-SonatypeReleases]][Link-SonatypeReleases]
 [![Snapshots][Badge-SonatypeSnapshots]][Link-SonatypeSnapshots]
+
+[Stage]: https://img.shields.io/badge/Project%20Stage-Development-yellowgreen.svg
+[Stage-Page]: https://github.com/zio/zio/wiki/Project-Stages
 
 This library provides instances for several Scalaz 7.2 typeclasses.
 
