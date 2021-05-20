@@ -10,8 +10,7 @@ import scalaz.Scalaz._
 
 object scalazPlatform72Spec extends DefaultRunnableSpec with GenIO {
 
-  private val rts = zio.Runtime.default
-
+  private val rts                                           = runner.runtime
   implicit def ioEqual[E: Equal, A: Equal]: Equal[IO[E, A]] =
     new Equal[IO[E, A]] {
       override def equal(io1: IO[E, A], io2: IO[E, A]): Boolean =
