@@ -38,7 +38,7 @@ lazy val root = project
     unusedCompileDependenciesFilter -= moduleFilter("org.scala-js", "scalajs-library")
   )
 
-val zioVersion = "1.0.0-RC21-2"
+val zioVersion = "1.0.8"
 
 lazy val interopScalaz7x = crossProject(JSPlatform, JVMPlatform)
   .in(file("interop-scalaz7x"))
