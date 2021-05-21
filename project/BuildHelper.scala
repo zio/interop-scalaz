@@ -13,16 +13,16 @@ object BuildHelper {
     import java.util.{ List => JList, Map => JMap }
     import scala.jdk.CollectionConverters._
 
-    val doc = new Load(LoadSettings.builder().build())
+    val doc  = new Load(LoadSettings.builder().build())
       .loadFromReader(scala.io.Source.fromFile(".github/workflows/ci.yml").bufferedReader())
     val yaml = doc.asInstanceOf[JMap[String, JMap[String, JMap[String, JMap[String, JMap[String, JList[String]]]]]]]
     val list = yaml.get("jobs").get("test").get("strategy").get("matrix").get("scala").asScala
     list.map(v => (v.split('.').take(2).mkString("."), v)).toMap
   }
 
-  val Scala211: String   = versions("2.11")
-  val Scala212: String   = versions("2.12")
-  val Scala213: String   = versions("2.13")
+  val Scala211: String = versions("2.11")
+  val Scala212: String = versions("2.12")
+  val Scala213: String = versions("2.13")
 
   private val stdOptions = Seq(
     "-deprecation",
