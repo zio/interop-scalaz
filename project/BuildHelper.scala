@@ -88,12 +88,12 @@ object BuildHelper {
     name := s"$prjName",
     scalacOptions := stdOptions,
     crossScalaVersions := Seq(Scala213, Scala212, Scala211),
-    scalaVersion in ThisBuild := crossScalaVersions.value.head,
+    ThisBuild / scalaVersion := crossScalaVersions.value.head,
     scalacOptions := stdOptions ++ extraOptions(scalaVersion.value),
     libraryDependencies ++= Seq(
       compilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
     ),
-    parallelExecution in Test := true,
+    Test / parallelExecution := true,
     incOptions ~= (_.withLogRecompileOnMacro(false)),
     autoAPIMappings := true,
     unusedCompileDependenciesFilter -= moduleFilter("org.scala-js", "scalajs-library"),

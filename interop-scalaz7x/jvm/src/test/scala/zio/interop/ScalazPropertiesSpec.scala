@@ -4,11 +4,11 @@ import zio.{ IO }
 import zio.random.Random
 import zio.test._
 import zio.test.Gen._
-import zio.interop.scalaz72._
 import scalaz._
-import scalaz.Scalaz._
+import _root_.scalaz._
+import _root_.scalaz.Scalaz._
 
-object scalazPlatform72Spec extends DefaultRunnableSpec with GenIO {
+object ScalazPropertiesSpec extends DefaultRunnableSpec with GenIO {
 
   private val rts = zio.Runtime.default
 
@@ -18,9 +18,9 @@ object scalazPlatform72Spec extends DefaultRunnableSpec with GenIO {
         rts.unsafeRun(io1.either) === rts.unsafeRun(io2.either)
     }
 
-  implicit def ioParEqual[E: Equal, A: Equal]: Equal[scalaz72.ParIO[Any, E, A]] =
-    new Equal[scalaz72.ParIO[Any, E, A]] {
-      override def equal(io1: scalaz72.ParIO[Any, E, A], io2: scalaz72.ParIO[Any, E, A]): Boolean =
+  implicit def ioParEqual[E: Equal, A: Equal]: Equal[ParIO[Any, E, A]] =
+    new Equal[ParIO[Any, E, A]] {
+      override def equal(io1: ParIO[Any, E, A], io2: ParIO[Any, E, A]): Boolean =
         rts.unsafeRun(Tag.unwrap(io1).either) === rts.unsafeRun(Tag.unwrap(io2).either)
     }
 
@@ -31,18 +31,18 @@ object scalazPlatform72Spec extends DefaultRunnableSpec with GenIO {
   implicit val intGenIOFn2: Gen[Random, IO[Int, Int => Int]]                               = genIO(intFn, Gen.anyInt)
   implicit def intGenIO: Gen[Random, IO[Int, Int]]                                         = genIO[Int, Int]
 
-  implicit val ioParGen: Gen[Random, scalaz72.ParIO[Any, Int, Int]]           = intGenIO.map(Tag.apply)
-  implicit val ioParGenFn2: Gen[Random, scalaz72.ParIO[Any, Int, Int => Int]] = intGenIOFn2.map(Tag.apply)
+  implicit val ioParGen: Gen[Random, ParIO[Any, Int, Int]]           = intGenIO.map(Tag.apply)
+  implicit val ioParGenFn2: Gen[Random, ParIO[Any, Int, Int => Int]] = intGenIOFn2.map(Tag.apply)
 
-  override def spec = suite("scalazPlatform72Spec")(
+  override def spec = suite("ScalazPropertiesSpec")(
     suite("laws must hold for")(
       ScalazProperties.bifunctor.laws[IO],
-      ScalazProperties.bindRec.laws[IO[Int, ?]],
-      ScalazProperties.plus.laws[IO[Int, ?]],
-      ScalazProperties.monadPlus.laws[IO[Int, ?]]("monad plus"),
-      ScalazProperties.monadPlus.laws[IO[Option[Unit], ?]]("monad plus (monoid)"),
-      ScalazProperties.monadError.laws[IO[Int, ?], Int],
-      ScalazProperties.applicative.laws[scalaz72.ParIO[Any, Int, ?]]
+      ScalazProperties.bindRec.laws[IO[Int, *]],
+      ScalazProperties.plus.laws[IO[Int, *]],
+      ScalazProperties.monadPlus.laws[IO[Int, *]]("monad plus"),
+      ScalazProperties.monadPlus.laws[IO[Option[Unit], *]]("monad plus (monoid)"),
+      ScalazProperties.monadError.laws[IO[Int, *], Int],
+      ScalazProperties.applicative.laws[ParIO[Any, Int, *]]
     )
   )
 }
