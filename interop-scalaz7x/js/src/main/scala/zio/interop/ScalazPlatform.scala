@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package zio
-package interop
+package zio.interop
 
-trait Scalaz72Platform {
-  val console = interop.console.scalazPlatform
-}
+trait ScalazPlatform

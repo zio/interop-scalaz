@@ -16,4 +16,6 @@
 
 package zio.interop
 
-trait Scalaz72Platform {}
+trait ScalazPlatform {
+  val console = zio.interop.console.scalaz
+}

@@ -4,7 +4,7 @@ import zio.random.Random
 import zio.test.Assertion._
 import zio.test._
 import zio.test.Gen
-import scalaz.{
+import _root_.scalaz.{
   Applicative,
   Apply,
   Bifunctor,

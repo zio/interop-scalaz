@@ -16,11 +16,12 @@
 
 package zio.interop
 
-import scalaz.Tags.Parallel
-import scalaz.{ @@, \/, Applicative, Bifunctor, BindRec, Monad, MonadError, MonadPlus, Monoid, Plus, Tag }
+import _root_.scalaz.Tags.Parallel
+import _root_.scalaz.{ @@, \/, Applicative, Bifunctor, BindRec, Monad, MonadError, MonadPlus, Monoid, Plus, Tag }
 import zio.{ RIO, Task, ZIO }
+import scalaz.ParIO
 
-object scalaz72 extends ZIOInstances with Scalaz72Platform {
+object scalaz extends ZIOInstances with ScalazPlatform {
   type ParIO[R, E, A] = ZIO[R, E, A] @@ Parallel
 }
 
@@ -32,7 +33,7 @@ abstract class ZIOInstances extends ZIOInstances1 {
   implicit val taskInstances: MonadError[Task, Throwable] with BindRec[Task] with Plus[Task] =
     new ZIOMonadError[Any, Throwable] with ZIOPlus[Any, Throwable]
 
-  implicit val taskParAp: Applicative[scalaz72.ParIO[Any, Throwable, ?]] = new ZIOParApplicative[Any, Throwable]
+  implicit val taskParAp: Applicative[ParIO[Any, Throwable, ?]] = new ZIOParApplicative[Any, Throwable]
 }
 
 sealed trait ZIOInstances1 extends ZIOInstances2 {
@@ -40,7 +41,7 @@ sealed trait ZIOInstances1 extends ZIOInstances2 {
     : MonadError[ZIO[R, E, ?], E] with BindRec[ZIO[R, E, ?]] with Bifunctor[ZIO[R, ?, ?]] with MonadPlus[ZIO[R, E, ?]] =
     new ZIOMonadPlus[R, E] with ZIOBifunctor[R]
 
-  implicit def zioParAp[R, E]: Applicative[scalaz72.ParIO[R, E, ?]] = new ZIOParApplicative[R, E]
+  implicit def zioParAp[R, E]: Applicative[ParIO[R, E, ?]] = new ZIOParApplicative[R, E]
 }
 
 sealed trait ZIOInstances2 {
@@ -53,8 +54,8 @@ private class ZIOMonad[R, E] extends Monad[ZIO[R, E, ?]] with BindRec[ZIO[R, E, 
   override def map[A, B](fa: ZIO[R, E, A])(f: A => B): ZIO[R, E, B]             = fa.map(f)
   override def point[A](a: => A): ZIO[R, E, A]                                  = ZIO.effectTotal(a)
   override def bind[A, B](fa: ZIO[R, E, A])(f: A => ZIO[R, E, B]): ZIO[R, E, B] = fa.flatMap(f)
-  override def tailrecM[A, B](f: A => ZIO[R, E, A \/ B])(a: A): ZIO[R, E, B]    =
-    f(a).flatMap(_.fold(tailrecM(f), point(_)))
+  override def tailrecM[A, B](a: A)(f: A => ZIO[R, E, A \/ B]): ZIO[R, E, B]    =
+    f(a).flatMap(_.fold(tailrecM(_)(f), point(_)))
 }
 
 private class ZIOMonadError[R, E] extends ZIOMonad[R, E] with MonadError[ZIO[R, E, ?], E] {
@@ -78,19 +79,19 @@ private trait ZIOBifunctor[R] extends Bifunctor[ZIO[R, ?, ?]] {
     fab.bimap(f, g)
 }
 
-private class ZIOParApplicative[R, E] extends Applicative[scalaz72.ParIO[R, E, ?]] {
-  override def point[A](a: => A): scalaz72.ParIO[R, E, A] = Tag(ZIO.effectTotal(a))
-  override def ap[A, B](fa: => scalaz72.ParIO[R, E, A])(f: => scalaz72.ParIO[R, E, A => B]): scalaz72.ParIO[R, E, B] = {
+private class ZIOParApplicative[R, E] extends Applicative[ParIO[R, E, ?]] {
+  override def point[A](a: => A): scalaz.ParIO[R, E, A] = Tag(ZIO.effectTotal(a))
+  override def ap[A, B](fa: => scalaz.ParIO[R, E, A])(f: => ParIO[R, E, A => B]): ParIO[R, E, B] = {
     lazy val fa0: ZIO[R, E, A] = Tag.unwrap(fa)
     Tag(Tag.unwrap(f).flatMap(x => fa0.map(x)))
   }
 
-  override def map[A, B](fa: scalaz72.ParIO[R, E, A])(f: A => B): scalaz72.ParIO[R, E, B] =
+  override def map[A, B](fa: ParIO[R, E, A])(f: A => B): ParIO[R, E, B] =
     Tag(Tag.unwrap(fa).map(f))
 
   override def apply2[A, B, C](
-    fa: => scalaz72.ParIO[R, E, A],
-    fb: => scalaz72.ParIO[R, E, B]
-  )(f: (A, B) => C): scalaz72.ParIO[R, E, C] =
+    fa: => ParIO[R, E, A],
+    fb: => ParIO[R, E, B]
+  )(f: (A, B) => C): ParIO[R, E, C] =
     Tag(Tag.unwrap(fa).zipPar(Tag.unwrap(fb)).map(f.tupled))
 }

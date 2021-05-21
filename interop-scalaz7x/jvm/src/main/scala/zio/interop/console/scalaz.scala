@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package zio
-package interop
-package console
-import zio.{ console => c }
-import scalaz._
+package zio.interop.console
+
+import zio.{ console => c, ZIO }
+import _root_.scalaz.Show
 import java.io.IOException
 
-object scalazPlatform {
+object scalaz {
 
   /**
    * Prints the string representation of an object to the console.
