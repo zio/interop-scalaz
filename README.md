@@ -8,13 +8,13 @@
 [Stage]: https://img.shields.io/badge/Project%20Stage-Development-yellowgreen.svg
 [Stage-Page]: https://github.com/zio/zio/wiki/Project-Stages
 
-This library provides instances for several Scalaz 7.2 typeclasses.
+This library provides instances for several Scalaz typeclasses.
 
 ### Example
 
 ```scala
 import scalaz._, Scalaz._
-import zio.interop.scalaz72._
+import zio.interop.scalaz._
 
 type Database = IList[User]
 
@@ -30,7 +30,7 @@ Due to `Applicative` and `Monad` coherence law `ZIO`'s `Applicative` instance ha
 
 ```scala
 import scalaz._, Scalaz._
-import zio.interop.scalaz72._
+import zio.interop.scalaz._
 
 case class Dashboard(details: UserDetails, history: TransactionHistory)
 
@@ -40,7 +40,7 @@ def getHistory(id: UserId): ZIO[Database, UserError, TransactionHistory] = ...
 def buildDashboard(id: UserId): ZIO[Database, UserError, Dashboard] =
   Tag.unwrap(^(par(getDetails(id)), par(getHistory(id)))(Dashboard.apply))
 
-def par[R, E, A](io: ZIO[R, E, A]): scalaz72.ParIO[R, E, A] = Tag(io)
+def par[R, E, A](io: ZIO[R, E, A]): ParIO[R, E, A] = Tag(io)
 ```
 
 [Badge-CI]: https://github.com/zio/interop-scalaz/workflows/CI/badge.svg
