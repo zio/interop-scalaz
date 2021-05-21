@@ -362,8 +362,8 @@ object ScalazProperties {
       axy: GenR[(Int => Int)]
     ) =
       suite("bifunctor")(
-        functor.laws[F[?, Int]](F.leftFunctor[Int], implicitly, implicitly, implicitly),
-        functor.laws[F[Int, ?]](F.rightFunctor[Int], implicitly, implicitly, implicitly)
+        functor.laws[F[*, Int]](F.leftFunctor[Int], implicitly, implicitly, implicitly),
+        functor.laws[F[Int, *]](F.rightFunctor[Int], implicitly, implicitly, implicitly)
       )
   }
 

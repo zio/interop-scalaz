@@ -26,31 +26,31 @@ object scalaz extends ZIOInstances with ScalazPlatform {
 }
 
 abstract class ZIOInstances extends ZIOInstances1 {
-  implicit def zioTaskInstances[R]: MonadError[RIO[R, ?], Throwable] with BindRec[RIO[R, ?]] with Plus[RIO[R, ?]] =
+  implicit def zioTaskInstances[R]: MonadError[RIO[R, *], Throwable] with BindRec[RIO[R, *]] with Plus[RIO[R, *]] =
     new ZIOMonadError[R, Throwable] with ZIOPlus[R, Throwable]
 
   // cached for efficiency
   implicit val taskInstances: MonadError[Task, Throwable] with BindRec[Task] with Plus[Task] =
     new ZIOMonadError[Any, Throwable] with ZIOPlus[Any, Throwable]
 
-  implicit val taskParAp: Applicative[ParIO[Any, Throwable, ?]] = new ZIOParApplicative[Any, Throwable]
+  implicit val taskParAp: Applicative[ParIO[Any, Throwable, *]] = new ZIOParApplicative[Any, Throwable]
 }
 
 sealed trait ZIOInstances1 extends ZIOInstances2 {
   implicit def zioMonoidInstances[R, E: Monoid]
-    : MonadError[ZIO[R, E, ?], E] with BindRec[ZIO[R, E, ?]] with Bifunctor[ZIO[R, ?, ?]] with MonadPlus[ZIO[R, E, ?]] =
+    : MonadError[ZIO[R, E, *], E] with BindRec[ZIO[R, E, *]] with Bifunctor[ZIO[R, *, *]] with MonadPlus[ZIO[R, E, *]] =
     new ZIOMonadPlus[R, E] with ZIOBifunctor[R]
 
-  implicit def zioParAp[R, E]: Applicative[ParIO[R, E, ?]] = new ZIOParApplicative[R, E]
+  implicit def zioParAp[R, E]: Applicative[ParIO[R, E, *]] = new ZIOParApplicative[R, E]
 }
 
 sealed trait ZIOInstances2 {
   implicit def zioInstances[R, E]
-    : MonadError[ZIO[R, E, ?], E] with BindRec[ZIO[R, E, ?]] with Bifunctor[ZIO[R, ?, ?]] with Plus[ZIO[R, E, ?]] =
+    : MonadError[ZIO[R, E, *], E] with BindRec[ZIO[R, E, *]] with Bifunctor[ZIO[R, *, *]] with Plus[ZIO[R, E, *]] =
     new ZIOMonadError[R, E] with ZIOPlus[R, E] with ZIOBifunctor[R]
 }
 
-private class ZIOMonad[R, E] extends Monad[ZIO[R, E, ?]] with BindRec[ZIO[R, E, ?]] {
+private class ZIOMonad[R, E] extends Monad[ZIO[R, E, *]] with BindRec[ZIO[R, E, *]] {
   override def map[A, B](fa: ZIO[R, E, A])(f: A => B): ZIO[R, E, B]             = fa.map(f)
   override def point[A](a: => A): ZIO[R, E, A]                                  = ZIO.effectTotal(a)
   override def bind[A, B](fa: ZIO[R, E, A])(f: A => ZIO[R, E, B]): ZIO[R, E, B] = fa.flatMap(f)
@@ -58,28 +58,28 @@ private class ZIOMonad[R, E] extends Monad[ZIO[R, E, ?]] with BindRec[ZIO[R, E, 
     f(a).flatMap(_.fold(tailrecM(_)(f), point(_)))
 }
 
-private class ZIOMonadError[R, E] extends ZIOMonad[R, E] with MonadError[ZIO[R, E, ?], E] {
+private class ZIOMonadError[R, E] extends ZIOMonad[R, E] with MonadError[ZIO[R, E, *], E] {
   override def handleError[A](fa: ZIO[R, E, A])(f: E => ZIO[R, E, A]): ZIO[R, E, A] = fa.catchAll(f)
   override def raiseError[A](e: E): ZIO[R, E, A]                                    = ZIO.fail(e)
 }
 
 /** lossy, throws away errors using the "first success" interpretation of Plus */
-private trait ZIOPlus[R, E] extends Plus[ZIO[R, E, ?]] {
+private trait ZIOPlus[R, E] extends Plus[ZIO[R, E, *]] {
   override def plus[A](a: ZIO[R, E, A], b: => ZIO[R, E, A]): ZIO[R, E, A] = a.orElse(b)
 }
 
-private class ZIOMonadPlus[R, E: Monoid] extends ZIOMonadError[R, E] with MonadPlus[ZIO[R, E, ?]] {
+private class ZIOMonadPlus[R, E: Monoid] extends ZIOMonadError[R, E] with MonadPlus[ZIO[R, E, *]] {
   override def plus[A](a: ZIO[R, E, A], b: => ZIO[R, E, A]): ZIO[R, E, A] =
     a.catchAll(e1 => b.catchAll(e2 => ZIO.fail(Monoid[E].append(e1, e2))))
   override def empty[A]: ZIO[R, E, A]                                     = raiseError(Monoid[E].zero)
 }
 
-private trait ZIOBifunctor[R] extends Bifunctor[ZIO[R, ?, ?]] {
+private trait ZIOBifunctor[R] extends Bifunctor[ZIO[R, *, *]] {
   override def bimap[A, B, C, D](fab: ZIO[R, A, B])(f: A => C, g: B => D): ZIO[R, C, D] =
     fab.bimap(f, g)
 }
 
-private class ZIOParApplicative[R, E] extends Applicative[ParIO[R, E, ?]] {
+private class ZIOParApplicative[R, E] extends Applicative[ParIO[R, E, *]] {
   override def point[A](a: => A): scalaz.ParIO[R, E, A] = Tag(ZIO.effectTotal(a))
   override def ap[A, B](fa: => scalaz.ParIO[R, E, A])(f: => ParIO[R, E, A => B]): ParIO[R, E, B] = {
     lazy val fa0: ZIO[R, E, A] = Tag.unwrap(fa)
