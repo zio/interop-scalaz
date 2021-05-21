@@ -31,17 +31,17 @@ object ScalazProperties {
 
   type GenR[A] = Gen[Random, A]
 
-  def checkLaw[A](law: (A) => Boolean)(implicit rv1: GenR[A]): ZIO[Random, Nothing, TestResult] =
+  def checkLaw[A](law: (A) => Boolean)(implicit rv1: GenR[A]): ZIO[Random with TestConfig, Nothing, TestResult] =
     check(rv1)(v1 => assert(law(v1))(isTrue))
 
   def checkLaw[A, B](
     law: (A, B) => Boolean
-  )(implicit rv1: GenR[A], rv2: GenR[B]): ZIO[Random, Nothing, TestResult] =
+  )(implicit rv1: GenR[A], rv2: GenR[B]): ZIO[Random with TestConfig, Nothing, TestResult] =
     check(rv1, rv2)((v1, v2) => assert(law(v1, v2))(isTrue))
 
   def checkLaw[A, B, C](
     law: (A, B, C) => Boolean
-  )(implicit rv1: GenR[A], rv2: GenR[B], rv3: GenR[C]): ZIO[Random, Nothing, TestResult] =
+  )(implicit rv1: GenR[A], rv2: GenR[B], rv3: GenR[C]): ZIO[Random with TestConfig, Nothing, TestResult] =
     check(rv1, rv2, rv3)((v1, v2, v3) => assert(law(v1, v2, v3))(isTrue))
 
   def checkLaw[A, B, C, D](law: (A, B, C, D) => Boolean)(implicit
@@ -49,7 +49,7 @@ object ScalazProperties {
     rv2: GenR[B],
     rv3: GenR[C],
     rv4: GenR[D]
-  ): ZIO[Random, Nothing, TestResult] =
+  ): ZIO[Random with TestConfig, Nothing, TestResult] =
     check(rv1, rv2, rv3, rv4)((v1, v2, v3, v4) => assert(law(v1, v2, v3, v4))(isTrue))
 
   def checkLaw[A, B, C, D, E](law: (A, B, C, D, E) => Boolean)(implicit
@@ -58,7 +58,7 @@ object ScalazProperties {
     rv3: GenR[C],
     rv4: GenR[D],
     rv5: GenR[E]
-  ): ZIO[Random, Nothing, TestResult] =
+  ): ZIO[Random with TestConfig, Nothing, TestResult] =
     check(rv1, rv2, rv3, rv4, rv5)((v1, v2, v3, v4, v5) => assert(law(v1, v2, v3, v4, v5))(isTrue))
 
   object semigroup {
