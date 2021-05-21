@@ -18,18 +18,19 @@ package interop
 package console
 import zio.{ console => c }
 import scalaz._
+import java.io.IOException
 
 object scalazPlatform {
 
   /**
    * Prints the string representation of an object to the console.
    */
-  def putStr[A](a: A)(implicit ev: Show[A]): ZIO[c.Console, Nothing, Unit] =
+  def putStr[A](a: A)(implicit ev: Show[A]): ZIO[c.Console, IOException, Unit] =
     c.putStr(ev.shows(a))
 
   /**
    * Prints the string representation of an object to the console, including a newline character.
    */
-  def putStrLn[A](a: A)(implicit ev: Show[A]): ZIO[c.Console, Nothing, Unit] =
+  def putStrLn[A](a: A)(implicit ev: Show[A]): ZIO[c.Console, IOException, Unit] =
     c.putStrLn(ev.shows(a))
 }
