@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
       - name: Setup Scala and Java
@@ -41,7 +41,7 @@ jobs:
         platform: ['JVM', 'JS']
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
       - name: Setup Scala and Java
@@ -67,7 +67,7 @@ jobs:
     if: github.event_name != 'pull_request'
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
       - name: Setup Scala and Java
