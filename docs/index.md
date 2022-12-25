@@ -6,7 +6,17 @@ sidebar_label: "ZIO Interop Scalaz"
 
 This library provides instances for several Scalaz typeclasses.
 
-### Example
+@PROJECT_BADGES@
+
+## Installation
+
+In order to use this library, we need to add the following line in our `build.sbt` file:
+
+```scala
+libraryDependencies += "dev.zio" %% "zio-interop-scalaz" % "@VERSION@"
+```
+
+## Example 1
 
 ```scala
 import scalaz._, Scalaz._
@@ -22,7 +32,7 @@ def findUsers(ids: IList[UserId]): ZIO[Database, UserError, IList[User]] = ids.t
 
 Due to `Applicative` and `Monad` coherence law `ZIO`'s `Applicative` instance has to be implemented in terms of `bind` hence when composing multiple effects using `Applicative` they will be sequenced. To cope with that limitation `ZIO` tagged with `Parallel` has an `Applicative` instance which is not `Monad` and operates in parallel.
 
-### Example
+## Example 2
 
 ```scala
 import scalaz._, Scalaz._

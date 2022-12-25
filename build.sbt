@@ -68,6 +68,14 @@ lazy val docs = project
     publish / skip := true,
     moduleName := "zio-interop-docs",
     scalacOptions -= "-Yno-imports",
-    scalacOptions -= "-Xfatal-warnings"
+    scalacOptions -= "-Xfatal-warnings",
+    projectName := "ZIO Interop Scalaz",
+    badgeInfo := Some(
+      BadgeInfo(
+        artifact = "zio-interop-scalaz_2.12",
+        projectStage = ProjectStage.Development
+      )
+    ),
+    docsPublishBranch := "master"
   )
   .enablePlugins(WebsitePlugin)
