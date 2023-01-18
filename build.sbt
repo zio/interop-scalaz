@@ -70,12 +70,9 @@ lazy val docs = project
     scalacOptions -= "-Yno-imports",
     scalacOptions -= "-Xfatal-warnings",
     projectName := "ZIO Interop Scalaz",
-    badgeInfo := Some(
-      BadgeInfo(
-        artifact = "zio-interop-scalaz_2.12",
-        projectStage = ProjectStage.Development
-      )
-    ),
+    mainModuleName := (interopScalaz7xJVM / moduleName).value,
+    projectStage := ProjectStage.Development,
+    ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(interopScalaz7xJVM),
     docsPublishBranch := "master"
   )
   .enablePlugins(WebsitePlugin)
