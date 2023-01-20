@@ -8,6 +8,6 @@ addSbtPlugin("ch.epfl.scala"      % "sbt-bloop"                 % "1.4.10")
 addSbtPlugin("com.geirsson"       % "sbt-ci-release"            % "1.5.7")
 addSbtPlugin("dev.zio"            % "zio-sbt-website"           % "0.2.0")
 
-libraryDependencies += "org.snakeyaml" % "snakeyaml-engine" % "2.6"
+libraryDependencies += "org.snakeyaml" % "snakeyaml-engine" % "2.3"
 
 resolvers += Resolver.sonatypeRepo("public")
