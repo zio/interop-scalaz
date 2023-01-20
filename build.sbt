@@ -5,7 +5,7 @@ import BuildHelper._
 inThisBuild(
   List(
     organization := "dev.zio",
-    homepage := Some(url("https://zio.dev")),
+    homepage := Some(url("https://zio.dev/zio-interop-scalaz")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
@@ -61,3 +61,18 @@ lazy val interopScalaz7xJS = interopScalaz7x.js
   .settings(
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0" % Test
   )
+
+lazy val docs = project
+  .in(file("zio-interop-docs"))
+  .settings(
+    publish / skip := true,
+    moduleName := "zio-interop-docs",
+    scalacOptions -= "-Yno-imports",
+    scalacOptions -= "-Xfatal-warnings",
+    projectName := "ZIO Interop Scalaz",
+    mainModuleName := (interopScalaz7xJVM / moduleName).value,
+    projectStage := ProjectStage.Development,
+    ScalaUnidoc / unidoc / unidocProjectFilter := inProjects(interopScalaz7xJVM),
+    docsPublishBranch := "master"
+  )
+  .enablePlugins(WebsitePlugin)
