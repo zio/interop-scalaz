@@ -6,6 +6,6 @@ addSbtPlugin("de.heikoseeberger"  % "sbt-header"                % "5.6.0")
 addSbtPlugin("com.github.cb372"   % "sbt-explicit-dependencies" % "0.2.16")
 addSbtPlugin("ch.epfl.scala"      % "sbt-bloop"                 % "1.4.10")
 addSbtPlugin("com.geirsson"       % "sbt-ci-release"            % "1.5.7")
-addSbtPlugin("dev.zio"            % "zio-sbt-website"           % "0.3.7")
+addSbtPlugin("dev.zio"            % "zio-sbt-website"           % "0.3.10")
 
 libraryDependencies += "org.snakeyaml" % "snakeyaml-engine" % "2.3"
